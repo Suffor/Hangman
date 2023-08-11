@@ -186,7 +186,7 @@ int main()
     }
     delete img;
 
-    cout << "git gud";
+    cout << "git gud noob";
     auto frame = new TextImg();
     frame->addLine("git gud")->addLine(hero);
     frame->render();
