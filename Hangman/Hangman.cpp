@@ -147,50 +147,87 @@ void awaitInput() {
     cin >> input;
 }
 
-int main()
-{    
-    string hero = getRandomHero();
-    vector<char> guesses = {};
-    auto count = guesses.size();
-    TextImg* img = new TextImg();
-
-    printHero(hero, guesses, img);
-    img->render();
-
-    while (getMisses(&hero, &guesses) < LIVES) {
-
-        auto input = getInput(&guesses, img);
-        guesses.push_back(input);
-        auto misses = getMisses(&hero, &guesses);
-        img->render();
-        delete img;
-        img = new TextImg();
-
-        printStatus(misses, img);
-        printHero(hero, guesses, img);
-
-        img->render();
-
-
-        if (winCondition(&hero, &guesses)) {
-            cout << "gz";
-            auto frame = new TextImg();
-            frame->addLine("gz")->addLine("lol")->addLine(to_string(misses) + " ist schon ziemlich sad");
-            frame->render();
-            delete frame;
-
-            awaitInput();
-            return 0;
-        }
-
-    }
-    delete img;
-
-    cout << "git gud noob";
+void winMessage(int misses) {    
     auto frame = new TextImg();
-    frame->addLine("git gud")->addLine(hero);
-    frame->render();
+    if (misses == 0) {
+        frame->addLine("gz")->addLine("Bruder!")->addLine(to_string(misses) + " Fehler?! Macher! das nenn ich n Immortal gamer!");
+        frame->render();
+    }
+    else if (misses == 1) {
+        frame->addLine("gz")->addLine("guter gamer")->addLine(to_string(misses) + " Fehler? Du spielst save auf Ancient Level.");
+        frame->render();
+    }
+    else if (misses == 2) {
+        frame->addLine("gz")->addLine("not bad.")->addLine(to_string(misses) + " Fehler... so kommst du nie aus Archon raus...");
+        frame->render();
+    }
+    else if (misses == 3) {
+        frame->addLine("gz")->addLine("naja, ")->addLine(to_string(misses) + " Fehler. So wie du hier raetst bist du save n pos 4 undying OTP... ");
+        frame->render();
+    }
+    else if (misses == 4) {
+        frame->addLine("gz")->addLine("gerade so... ")->addLine(to_string(misses) + " Fehler. Also entweder du hast nur 2-3 mal Dota gespielt, oder du bist in bre der Wraith King doomt. Wie isses so in Guardian? ");
+        frame->render();
+    }
     delete frame;
+}
+
+/*bool playAgain() {
+    bool replayAnswer;
+    auto frame = new TextImg();
+    frame->addLine("möchtest du nochmal?(true/false)");
+    frame->render();
+    cin >> replayAnswer;
+    delete frame;
+    return replayAnswer;
+}*/
+
+int main()
+{   
+    bool again;
+    do{
+        bool again = false;
+        string hero = getRandomHero();
+        vector<char> guesses = {};
+        auto count = guesses.size();
+        TextImg* img = new TextImg();
+
+        printHero(hero, guesses, img);
+        img->render();
+
+        while (getMisses(&hero, &guesses) < LIVES) {
+
+            auto input = getInput(&guesses, img);
+            guesses.push_back(input);
+            auto misses = getMisses(&hero, &guesses);
+            img->render();
+            delete img;
+            img = new TextImg();
+
+            printStatus(misses, img);
+            printHero(hero, guesses, img);
+
+            img->render();
+
+
+            if (winCondition(&hero, &guesses)) {
+                cout << "gz";
+                winMessage(misses);
+                awaitInput();
+
+                return 0;
+            }
+
+        }
+        delete img;
+
+        cout << "git gud noob";
+        auto frame = new TextImg();
+        frame->addLine("git gud Herald noob")->addLine(hero);
+        frame->render();
+        delete frame;
+       // playAgain();
+    } while (again == true);
     awaitInput();
     return 0;
 
