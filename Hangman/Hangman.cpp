@@ -186,7 +186,7 @@ int main()
 {   
     bool again;
     do{
-        bool again = false;
+        again = false;
         string hero = getRandomHero();
         vector<char> guesses = {};
         auto count = guesses.size();
