@@ -30,7 +30,7 @@ class TextImg {
         void render() {
             system("cls");
 
-            for (auto i = 0; i < this->lines.size(); i++)
+            for (auto i = 0; i < this->lines.size(); i++)               //Konflikt signed unsigned untersuchen
             {
                 auto line = this->lines.at(i);
                 cout << line << endl;
@@ -85,36 +85,46 @@ void printHero(string hero, vector<char> guesses, TextImg* img) {
     img->addLine(output);
 }
 
-
 char getInput(const vector<char>* guesses, TextImg* img) {
 
     while(true) {
         char input;
         cin >> input;
-
+        char lower = tolower(input);
         // if next char is not new line
         if (cin.peek() != '\n') {
             cout << "Bitte nur ein Buchstabe" << endl;
-        }else if (contians(guesses, input)) {
+        }else if (contians(guesses, lower)) {
             cout << "Doppelt" << endl;
 
-        }else if (!isalpha(input)) {
+        }else if (!isalpha(lower)) {
             cout << "Keine Nummern du Huso" << endl;
 
         }else {
-            char lower = tolower(input);
+            
             return  lower;
         }     
     }
 }
 
+string str_lower(const string* upper) {
+    string lower = "";
+    for (auto i = 0; i < upper->size(); i++)
+    {
+        char charakter = tolower(upper->at(i));
+        lower.push_back(charakter);
+    }
+    return lower;
+}
+
 int getMisses(const string* hero, const vector<char>* guesses) {
     int misses = 0;
     
+    string herolower = str_lower(hero);
     for (auto i = 0; i < guesses->size(); i++)
     {
         char guess = guesses->at(i);
-        if (!contians(hero, guess)) {
+        if (!contians(&herolower, guess)) {
             misses++;
         }
     }
@@ -185,7 +195,7 @@ void winMessage(int misses) {
 int main()
 {   
     bool again;
-    do{
+    do{                                         //zu "playGame" funktion machen
         again = false;
         string hero = getRandomHero();
         vector<char> guesses = {};
@@ -195,7 +205,7 @@ int main()
         printHero(hero, guesses, img);
         img->render();
 
-        while (getMisses(&hero, &guesses) < LIVES) {
+        while (getMisses(&hero, &guesses) < LIVES) { 
 
             auto input = getInput(&guesses, img);
             guesses.push_back(input);
