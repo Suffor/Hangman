@@ -182,6 +182,13 @@ void winMessage(int misses) {
     delete frame;
 }
 
+void displayUsedLetters(const vector<char> guesses, TextImg* img) {
+    img->addLine("bereits verwendete Buchstaben:");
+    string letters(guesses.begin(), guesses.end());                             //(transforms char vector to string[string stringVAR(charVAR.begin(), charVAR.end())])
+        img->addLine(letters);
+        
+}
+
 /*bool playAgain() {
     bool replayAnswer;
     auto frame = new TextImg();
@@ -216,6 +223,7 @@ int main()
 
             printStatus(misses, img);
             printHero(hero, guesses, img);
+            displayUsedLetters(guesses, img);
 
             img->render();
 

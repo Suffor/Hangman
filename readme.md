@@ -7,3 +7,6 @@
 
 ## Anderes
 - Buchstabenliste anzeigen
+- anti-Farbenblindenmodus
+- Ascii Hangman Image (renderer)
+- Game wiederholen
