@@ -1,18 +1,41 @@
 #pragma once
 #include <string>
+#include "config.h"
+#include <map>
+
+using namespace std;
+
+map<Difficulty, int> LIVES{ {easy, 8}, {normal, 5}, {hard, 3} };
+map<Difficulty, string> DIFFICLUTY_NAMES{ {easy, "leicht"}, {normal, "normal"}, {hard, "schwer"} };
 
 
 const char PLACEHOLDER = '_';
 const char SPACE = ' ';
-const int LIVESEZ = 8;
-const int LIVES = 5;
-const int LIVESHARD = 3;
+
+
+enum ATTR { strength, agility, inteligence, universal };
+
+struct Hero {
+	string name;
+	ATTR primary;
+
+	Hero(string name, ATTR attr) {
+		this->primary = attr;
+		this->name = name;
+	}
+};
+
+const Hero HEROS2[] = {
+	Hero("Abaddon", universal),
+	Hero("Alchemist", strength)
+};
+
 
 const std::string HEROS[] = {
 	"Abaddon",
 	"Alchemist",
 	"Ancient Apparition",
-	"Anti-Mage",
+	"Anti Mage",
 	"Arc Warden",
 	"Axe",
 	"Bane",

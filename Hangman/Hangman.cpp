@@ -1,13 +1,15 @@
-#include <iostream>
 #include <vector>
 #include <cctype>
-#include "constants.h"
 #include <time.h>       
 #include <tuple>
+#include <memory>
+#include <iostream>
+
+#include "constants.h"
+#include "renderer.h"
+
 
 using namespace std;
-
-struct MenuStruct { int menuWahl; int schwierigkeit; };
 
 
 string getRandomHero() {
@@ -17,33 +19,6 @@ string getRandomHero() {
     
     return HEROS[random];
 }
-
-class TextImg {
-
-    vector<string> lines = {};
-
-    public: 
-        TextImg() {
-
-        }
-        TextImg* addLine(string line) {
-            this->lines.push_back(line);
-            return this;
-        }
-        void render() {
-            system("cls");
-
-            for (auto i = 0; i < this->lines.size(); i++)               //Konflikt signed unsigned untersuchen
-            {
-                auto line = this->lines.at(i);
-                cout << line << endl;
-            }
-        }
-};
-
-
-
-
 
 
 template<typename Type>
@@ -209,47 +184,37 @@ void displayUsedLetters(const vector<char> guesses, TextImg* img) {
         
 }
 
-int difficulty(int schwierigkeit) {
-    int lives;
-    if (schwierigkeit == 0) {
-        lives = LIVESEZ;
-    }
-    else if (schwierigkeit == 1) {
-        lives = LIVES;
-    }
-    else if (schwierigkeit == 2) {
-        lives = LIVESHARD;
-    }
-    return lives;
+int getLives(Config config) {
+    return LIVES[config.difficulty];
 }
 
-MenuStruct mainMenu() {
-    MenuStruct spielerwahl;
-    int menuIn = 0;
-    vector <string> schwierigk = { "leicht", "normal", "schwer" };
-    int schwierigkcount=1;
+MenuState mainMenu() {
 
+    int difficulty = 1;
 
-    while (menuIn == 0 || menuIn== 2) {
-        TextImg* menu = new TextImg();
+    while (true) {
+
+        auto menu = std::unique_ptr<TextImg>(new TextImg());
+
         menu->addLine("Willkommen zu Dota2-Hangman!");
         menu->addLine("1-Starte das verdammte Spiel!");
-        menu->addLine("2-Schwierigkeitsgrad: " + schwierigk[schwierigkcount%3]);
+        menu->addLine("2-Schwierigkeitsgrad: " + DIFFICLUTY_NAMES[static_cast<Difficulty>(difficulty)]);
         menu->addLine("3-Optionen(inaktiv)");
         menu->addLine("4-Beenden");
         menu->render();
+        int menuIn;
         cin >> menuIn;
         if (menuIn == 2) {
-            schwierigkcount++;
+            difficulty++;
+            difficulty = difficulty % 3;
+            continue;
         }
-        delete menu;
+
+        return MenuState(static_cast<Difficulty>(difficulty), static_cast<MenuOption>(menuIn));
     }
-    spielerwahl.menuWahl = menuIn;
-    spielerwahl.schwierigkeit = schwierigkcount % 3;
-    return spielerwahl;
 }
 
-bool playGame(int schwierigkeit)
+bool playGame(Config config)
 {
     bool again = false;
     string hero = getRandomHero();
@@ -260,7 +225,7 @@ bool playGame(int schwierigkeit)
     printHero(hero, guesses, img);
     img->render();
     
-    int lives = difficulty(schwierigkeit);
+    int lives = getLives(config);
 
     while (getMisses(&hero, &guesses) < lives) {
 
@@ -302,16 +267,15 @@ int main()
 {   
     bool again = false;
     bool exit = false;
-    MenuStruct spielerWahl;
-    
+
     do {
-        spielerWahl = mainMenu();
-        if (spielerWahl.menuWahl == 1) {
+        MenuState choice = mainMenu();
+        if (choice.selected == 1) {
             do {
-                again = playGame(spielerWahl.schwierigkeit);
+                again = playGame(choice.config);
             } while (again == true);
         }
-        else if (spielerWahl.menuWahl == 4) {
+        else if (choice.selected == 4) {
             exit = true;
             return 0;
         }
