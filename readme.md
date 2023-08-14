@@ -10,7 +10,7 @@
 - Buchstabenliste anzeigen (done)(könnte man noch alphabetisch sortieren)
 - anti-Farbenblindenmodus
 - Ascii Hangman Image (renderer)
-- Game wiederholen
+- Game wiederholen (done)
 
 ## weitere Subgames
 - Held an startattributen erkennen

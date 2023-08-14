@@ -206,7 +206,19 @@ void displayUsedLetters(const vector<char> guesses, TextImg* img) {
         
 }
 
+int mainMenu() {
+    int menuWahl = 0;
 
+    TextImg* menu = new TextImg();
+    menu->addLine("Willkommen zu Dota2-Hangman!");
+    menu->addLine("1-Starte das verdammte Spiel!");
+    menu->addLine("2-Schwierigkeitsgrad(inaktiv)");
+    menu->addLine("3-Optionen(inaktiv)");
+    menu->render();
+    cin >> menuWahl;
+    delete menu;
+    return menuWahl;
+}
 
 bool playGame()
 {
@@ -258,9 +270,12 @@ bool playGame()
 int main()
 {   
     bool again = false;
-    do {
-        again = playGame();      
-    } while (again == true);
+    
+    if (mainMenu() == 1) {
+        do {
+            again = playGame();
+        } while (again == true);
+    }
     return 0;
 }
 
