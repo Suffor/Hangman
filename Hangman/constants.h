@@ -4,7 +4,9 @@
 
 const char PLACEHOLDER = '_';
 const char SPACE = ' ';
+const int LIVESEZ = 8;
 const int LIVES = 5;
+const int LIVESHARD = 3;
 
 const std::string HEROS[] = {
 	"Abaddon",

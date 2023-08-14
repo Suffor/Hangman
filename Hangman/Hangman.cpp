@@ -157,7 +157,22 @@ void awaitInput() {
     cin >> input;
 }
 
-void winMessage(int misses) {    
+bool playAgain(TextImg* frame) {
+    bool replayAnswer = false;
+    frame->addLine("moechtest du nochmal?(true/false)");
+    frame->render();
+    cin >> boolalpha >> replayAnswer;                       //boolapha wandelt bool in textform "true/false"
+    if (replayAnswer) {
+        return replayAnswer;
+    }
+    else {
+        frame->addLine("ungültige Eingabe, Spiel wird beendet");
+        return false;
+    }
+}
+
+bool winMessage(int misses) {
+    bool again = false;
     auto frame = new TextImg();
     if (misses == 0) {
         frame->addLine("gz")->addLine("Bruder!")->addLine(to_string(misses) + " Fehler?! Macher! das nenn ich n Immortal gamer!");
@@ -179,7 +194,9 @@ void winMessage(int misses) {
         frame->addLine("gz")->addLine("gerade so... ")->addLine(to_string(misses) + " Fehler. Also entweder du hast nur 2-3 mal Dota gespielt, oder du bist in bre der Wraith King doomt. Wie isses so in Guardian? ");
         frame->render();
     }
+    again = playAgain(frame);
     delete frame;
+    return again;
 }
 
 void displayUsedLetters(const vector<char> guesses, TextImg* img) {
@@ -189,65 +206,61 @@ void displayUsedLetters(const vector<char> guesses, TextImg* img) {
         
 }
 
-/*bool playAgain() {
-    bool replayAnswer;
+
+
+bool playGame()
+{
+    bool again = false;
+    string hero = getRandomHero();
+    vector<char> guesses = {};
+    auto count = guesses.size();
+    TextImg* img = new TextImg();
+
+    printHero(hero, guesses, img);
+    img->render();
+
+    while (getMisses(&hero, &guesses) < LIVES) {
+
+        auto input = getInput(&guesses, img);
+        guesses.push_back(input);
+        auto misses = getMisses(&hero, &guesses);
+        img->render();
+        delete img;
+        img = new TextImg();
+
+        printStatus(misses, img);
+        printHero(hero, guesses, img);
+        displayUsedLetters(guesses, img);
+
+        img->render();
+
+
+        if (winCondition(&hero, &guesses)) {
+            cout << "gz";
+            again = winMessage(misses);
+            //awaitInput();
+            
+            return again;
+        }
+
+    }
+    delete img;
+
+    cout << "git gud noob";
     auto frame = new TextImg();
-    frame->addLine("möchtest du nochmal?(true/false)");
+    frame->addLine("git gud Herald noob")->addLine(hero);
     frame->render();
-    cin >> replayAnswer;
+    again = playAgain(frame);
     delete frame;
-    return replayAnswer;
-}*/
+    return again;
+}
 
 int main()
 {   
-    bool again;
-    do{                                         //zu "playGame" funktion machen
-        again = false;
-        string hero = getRandomHero();
-        vector<char> guesses = {};
-        auto count = guesses.size();
-        TextImg* img = new TextImg();
-
-        printHero(hero, guesses, img);
-        img->render();
-
-        while (getMisses(&hero, &guesses) < LIVES) { 
-
-            auto input = getInput(&guesses, img);
-            guesses.push_back(input);
-            auto misses = getMisses(&hero, &guesses);
-            img->render();
-            delete img;
-            img = new TextImg();
-
-            printStatus(misses, img);
-            printHero(hero, guesses, img);
-            displayUsedLetters(guesses, img);
-
-            img->render();
-
-
-            if (winCondition(&hero, &guesses)) {
-                cout << "gz";
-                winMessage(misses);
-                awaitInput();
-
-                return 0;
-            }
-
-        }
-        delete img;
-
-        cout << "git gud noob";
-        auto frame = new TextImg();
-        frame->addLine("git gud Herald noob")->addLine(hero);
-        frame->render();
-        delete frame;
-       // playAgain();
+    bool again = false;
+    do {
+        again = playGame();      
     } while (again == true);
-    awaitInput();
     return 0;
-
 }
 
