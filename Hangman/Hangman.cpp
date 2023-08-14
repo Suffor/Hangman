@@ -7,7 +7,7 @@
 
 using namespace std;
 
-struct MenuStruct { int menuWahl; int schwierigkeit };
+struct MenuStruct { int menuWahl; int schwierigkeit; };
 
 
 string getRandomHero() {
@@ -214,7 +214,7 @@ int difficulty(int schwierigkeit) {
     if (schwierigkeit == 0) {
         lives = LIVESEZ;
     }
-    else if (schierigkeit == 1) {
+    else if (schwierigkeit == 1) {
         lives = LIVES;
     }
     else if (schwierigkeit == 2) {
@@ -227,7 +227,7 @@ MenuStruct mainMenu() {
     MenuStruct spielerwahl;
     int menuIn = 0;
     vector <string> schwierigk = { "leicht", "normal", "schwer" };
-    int schwierigkcount;
+    int schwierigkcount=1;
 
 
     while (menuIn == 0 || menuIn== 2) {
