@@ -3,8 +3,11 @@
 #include <cctype>
 #include "constants.h"
 #include <time.h>       
+#include <tuple>
 
 using namespace std;
+
+struct MenuStruct { int menuWahl; int schwierigkeit };
 
 
 string getRandomHero() {
@@ -131,8 +134,8 @@ int getMisses(const string* hero, const vector<char>* guesses) {
     return misses;
 }
 
-void printStatus(int misses, TextImg* img) {
-    auto tries = to_string(LIVES - misses);
+void printStatus(int misses, TextImg* img, int lives) {
+    auto tries = to_string(lives - misses);
     string str = "Du hast noch ";
     str.append(tries);
     str.append(" Versuche");
@@ -206,21 +209,47 @@ void displayUsedLetters(const vector<char> guesses, TextImg* img) {
         
 }
 
-int mainMenu() {
-    int menuWahl = 0;
-
-    TextImg* menu = new TextImg();
-    menu->addLine("Willkommen zu Dota2-Hangman!");
-    menu->addLine("1-Starte das verdammte Spiel!");
-    menu->addLine("2-Schwierigkeitsgrad(inaktiv)");
-    menu->addLine("3-Optionen(inaktiv)");
-    menu->render();
-    cin >> menuWahl;
-    delete menu;
-    return menuWahl;
+int difficulty(int schwierigkeit) {
+    int lives;
+    if (schwierigkeit == 0) {
+        lives = LIVESEZ;
+    }
+    else if (schierigkeit == 1) {
+        lives = LIVES;
+    }
+    else if (schwierigkeit == 2) {
+        lives = LIVESHARD;
+    }
+    return lives;
 }
 
-bool playGame()
+MenuStruct mainMenu() {
+    MenuStruct spielerwahl;
+    int menuIn = 0;
+    vector <string> schwierigk = { "leicht", "normal", "schwer" };
+    int schwierigkcount;
+
+
+    while (menuIn == 0 || menuIn== 2) {
+        TextImg* menu = new TextImg();
+        menu->addLine("Willkommen zu Dota2-Hangman!");
+        menu->addLine("1-Starte das verdammte Spiel!");
+        menu->addLine("2-Schwierigkeitsgrad: " + schwierigk[schwierigkcount%3]);
+        menu->addLine("3-Optionen(inaktiv)");
+        menu->addLine("4-Beenden");
+        menu->render();
+        cin >> menuIn;
+        if (menuIn == 2) {
+            schwierigkcount++;
+        }
+        delete menu;
+    }
+    spielerwahl.menuWahl = menuIn;
+    spielerwahl.schwierigkeit = schwierigkcount % 3;
+    return spielerwahl;
+}
+
+bool playGame(int schwierigkeit)
 {
     bool again = false;
     string hero = getRandomHero();
@@ -230,8 +259,10 @@ bool playGame()
 
     printHero(hero, guesses, img);
     img->render();
+    
+    int lives = difficulty(schwierigkeit);
 
-    while (getMisses(&hero, &guesses) < LIVES) {
+    while (getMisses(&hero, &guesses) < lives) {
 
         auto input = getInput(&guesses, img);
         guesses.push_back(input);
@@ -240,7 +271,7 @@ bool playGame()
         delete img;
         img = new TextImg();
 
-        printStatus(misses, img);
+        printStatus(misses, img, lives);
         printHero(hero, guesses, img);
         displayUsedLetters(guesses, img);
 
@@ -270,12 +301,21 @@ bool playGame()
 int main()
 {   
     bool again = false;
+    bool exit = false;
+    MenuStruct spielerWahl;
     
-    if (mainMenu() == 1) {
-        do {
-            again = playGame();
-        } while (again == true);
-    }
+    do {
+        spielerWahl = mainMenu();
+        if (spielerWahl.menuWahl == 1) {
+            do {
+                again = playGame(spielerWahl.schwierigkeit);
+            } while (again == true);
+        }
+        else if (spielerWahl.menuWahl == 4) {
+            exit = true;
+            return 0;
+        }
+    } while (!exit);
     return 0;
 }
 
