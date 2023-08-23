@@ -1,8 +1,8 @@
 # Feature Ideen
 
 ## Schwierigkeitsgrad:
-- Timer
-- Lebensanzahl variabel
+- Timer (nutzereingabe überprüfen und solange timen)	
+- Lebensanzahl variabel (done)
 - Hauptatribut gegeben
 - Skill erraten, Item erraten
 
@@ -11,6 +11,8 @@
 - anti-Farbenblindenmodus
 - Ascii Hangman Image (renderer)
 - Game wiederholen (done)
+- survival modus
+- cin das ganze Wort
 
 ## weitere Subgames
 - Held an startattributen erkennen
