@@ -6,7 +6,7 @@ enum MenuOption { start = 1, difficulty = 2, options = 3, close = 4};
 
 struct Config {
     Difficulty difficulty = Difficulty::normal;
-    int time;
+    int time = 0;
 };
 
 struct MenuState {

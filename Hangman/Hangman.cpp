@@ -8,12 +8,15 @@
 #include <optional>
 #include <cctype>
 
+#include "game.h"
 #include "constants.h"
 #include "renderer.h"
 
-
 using namespace std;
 
+
+map<Difficulty, int> LIVES{ {easy, 8}, {normal, 5}, {hard, 3} };
+map<Difficulty, string> DIFFICLUTY_NAMES{ {easy, "leicht"}, {normal, "normal"}, {hard, "schwer"} };
 
 char toLower(char input) {
 	if (input > 64 && input < 91) {
@@ -307,6 +310,11 @@ MenuState mainMenu() {
 
 bool playGame(Config config)
 {
+	Game game = Game(config);
+
+	game.run();
+	return false;
+
 	bool again = false;
 	string hero = getRandomHero();
 	vector<char> guesses = {};
@@ -386,4 +394,5 @@ int main()
 	} while (!exit);
 	return 0;
 }
+
 

@@ -1,12 +1,9 @@
 #pragma once
 #include <string>
-#include "config.h"
 #include <map>
+#include "config.h"
 
 using namespace std;
-
-map<Difficulty, int> LIVES{ {easy, 8}, {normal, 5}, {hard, 3} };
-map<Difficulty, string> DIFFICLUTY_NAMES{ {easy, "leicht"}, {normal, "normal"}, {hard, "schwer"} };
 
 
 const char PLACEHOLDER = '_';
