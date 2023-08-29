@@ -3,6 +3,7 @@
 #include <vector>
 #include <optional>
 #include "constants.h"
+#include "renderer.h"
 
 const int TARGET_FPS = 60;
 const double TARGET_FRAME_TIME = 1000 / TARGET_FPS;
@@ -16,7 +17,7 @@ enum class InputError:int {
 struct GameState {
 	string hero;
 	vector<char> guesses = {};
-	double lastInputTime;
+	double lastInputTime = 0.0;
 	optional<InputError> error;
 	optional<string> ending;
 };
@@ -35,6 +36,7 @@ class Game {
 private:
 	GameState* state;
 	Config config;
+	AsciiRenderer renderer;
 
 	bool isFinished();
 	std::vector<GameEvent> getInput();

@@ -35,17 +35,32 @@ void Game::update(double deltaTime, vector<GameEvent> events)
 	
 }
 
+void testLine(AsciiRenderer* renderer, RGBColor color) {
+	renderer->newLine();
+	for (size_t i = 0; i < 20; i++)
+	{
+		float factor = i / 19.0f;
+		renderer->push(RGBColor((int)(color.r * factor), (int)(color.g * factor), (int)(color.b * factor)));
+	}
+}
+
 void Game::render(double deltaTime)
 {
+	this->renderer.clear();
 	string out = "frame took: ";
 	out.append(to_string(deltaTime));
 	out.append("ms");
-	cout << out;
+	testLine(&this->renderer, RGBColor(255, 255, 255));
+	this->renderer.pushLn(out, RGBColor(200, 200, 200));
+	testLine(&this->renderer, RGBColor(255, 0, 0));
+
 	if (this->state->ending.has_value()) {
 
 	} else {
 
 	}
+
+	this->renderer.render();
 }
 
 bool Game::isFinished()
@@ -56,6 +71,7 @@ bool Game::isFinished()
 void Game::run() {
 
 	auto t_last = std::chrono::high_resolution_clock::now();
+	system("cls");
 	
 	while (!this->isFinished())
 	{
@@ -75,7 +91,6 @@ void Game::run() {
 
 
 		int wait = TARGET_FRAME_TIME - duration;
-		cout << to_string(duration) << " wait: " << to_string(wait) << "\n";
 
 		if (wait > 0) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(wait));
