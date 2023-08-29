@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "game.h"
+#include "renderer.cpp"
 
 // implmentation as "real" game loop
 using namespace std;
@@ -75,7 +76,8 @@ void Game::run() {
 
 
 		int wait = TARGET_FRAME_TIME - duration;
-		cout << to_string(duration) << " wait: " << to_string(wait) << "\n";
+		//cout << to_string(duration) << " wait: " << to_string(wait) << "\n";
+		
 
 		if (wait > 0) {
 			std::this_thread::sleep_for(std::chrono::milliseconds(wait));

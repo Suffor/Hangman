@@ -359,7 +359,6 @@ bool playGame(Config config)
 			cout << "gz";
 			again = winMessage(misses, config);
 			//awaitInput();
-
 			return again;
 		}
 
