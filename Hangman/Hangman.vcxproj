@@ -128,11 +128,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="colors.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="Hangman.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colors.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="constants.h" />
     <ClInclude Include="game.h" />
