@@ -5,7 +5,6 @@
 #include <thread>
 
 #include "game.h"
-#include "renderer.cpp"
 
 // implmentation as "real" game loop
 using namespace std;
